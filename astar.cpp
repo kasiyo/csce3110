@@ -7,7 +7,7 @@ double Astar::getHeuristic(int x, int y, int destX, int destY){
 }
 
 bool Astar::nodeBoundCheck(int x, int y){
-	return (!(x >= 0 && x <= MAX_ROW && y >= 0 && y <= MAX_COL));
+	return (x >= 0 && x < MAX_ROW && y >= 0 && y < MAX_COL);
 }
 bool Astar::nodeBlockCheck(int x, int y, int grid[][MAX_COL]){
 	if(grid[x][y] == 1){
@@ -54,8 +54,8 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 
 	//Check for errors
 	if(grid){
-		if(nodeBoundCheck(source.first, source.second)){printf("A* ERROR: Source Node out of range. x: %d, y: %d\n", source.first, source.second);}
-		if(nodeBoundCheck(dest.first, dest.second)){printf("A* ERROR: Destination Node out of range. x: %d, y: %d\n", dest.first, dest.second);}
+		if(!nodeBoundCheck(source.first, source.second)){printf("A* ERROR: Source Node out of range. x: %d, y: %d\n", source.first, source.second);}
+		if(!nodeBoundCheck(dest.first, dest.second)){printf("A* ERROR: Destination Node out of range. x: %d, y: %d\n", dest.first, dest.second);}
 		if(!nodeBlockCheck(source.first, source.second, grid)){printf("A* ERROR: Source Node in the wall. x: %d, y: %d\n", source.first, source.second);}
 		if(!nodeBlockCheck(dest.first, dest.second, grid)){printf("A* ERROR: Destination Node in the wall. x: %d, y: %d\n", dest.first, dest.second);}
 
