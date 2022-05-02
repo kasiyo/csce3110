@@ -110,10 +110,10 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					S
 			
 			Cell-->Popped Cell (i, j)
-         	N -->  North       (i-1, j)
-         	S -->  South       (i+1, j)
-         	E -->  East        (i, j+1)
-         	W -->  West        (i, j-1)
+			N -->  North       (i-1, j)
+			S -->  South       (i+1, j)
+			E -->  East        (i, j+1)
+			W -->  West        (i, j-1)
 			*/
 
 			double ftemp, gtemp, htemp; //storing the f, g, and h of the successors
