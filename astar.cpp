@@ -105,7 +105,7 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
  
 					N  
 					| 
-			W---- Node ----E
+				W---- Node ----E
 			 		|
 					S
 			
