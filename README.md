@@ -19,7 +19,7 @@ mazes represent, that is, creating a path in life despite it feeling like an end
 3. Visualizer Classes/Functions - [insert files used]	(Kaia Siripanyo)  
 
 
-**Resources:** 
+**Resources:**  
 [General explanation and visualization of concepts](https://emmilco.github.io/path_finder/)  
 [Different types of math generators and solvers](https://www.astrolog.org/labyrnth/algrithm.htm)  
 [A* pathfinder](https://www.geeksforgeeks.org/a-search-algorithm/)  
