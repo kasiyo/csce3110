@@ -1,29 +1,22 @@
+//A* Algorithm CPP File
 #include "astar.h"
 using namespace std;
 
-double Astar::getEuclideanDistance(int x, int y){return sqrt((x * x)+(y * y));}
 double Astar::getHeuristic(int x, int y, int destX, int destY){
-	return getEuclideanDistance((x - destX), (y - destY));
+	return (abs(x - destX) + abs(y - destY));
 }
 
 bool Astar::nodeBoundCheck(int x, int y){
-	return (x >= 0 && x < MAX_ROW && y >= 0 && y < MAX_COL);
+	//If x and y is in range, then return true
+	return ((x >= 0) && (x < MAX_ROW) && (y >= 0) && (y < MAX_COL));
 }
 bool Astar::nodeBlockCheck(int x, int y, int grid[][MAX_COL]){
-	if(grid[x][y] == 1){
-		return true;
-	} else {
-		return false;
-	}
+	//If node is not blocked, then return true, else false
+	if(grid[x][y] == 1) {return true;} else {return false;}
 }
 
 bool Astar::destReached(int x, int y, int destX, int destY){
-	printf("x: %d, y: %d, dest_x: %d, dest_y: %d\n", x, y, destX, destY);
-	if((x == destX) && (y == destY)){
-		return true;
-	}else{
-		return false;
-	}
+	if((x == destX) && (y == destY)) {return true;} else {return false;}
 }
 
 void Astar::tracePath(node details[][MAX_COL], Pair dest){
@@ -54,16 +47,21 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 
 	//Check for errors
 	if(grid){
-		if(!nodeBoundCheck(source.first, source.second)){printf("A* ERROR: Source Node out of range. x: %d, y: %d\n", source.first, source.second);}
-		if(!nodeBoundCheck(dest.first, dest.second)){printf("A* ERROR: Destination Node out of range. x: %d, y: %d\n", dest.first, dest.second);}
-		if(!nodeBlockCheck(source.first, source.second, grid)){printf("A* ERROR: Source Node in the wall. x: %d, y: %d\n", source.first, source.second);}
-		if(!nodeBlockCheck(dest.first, dest.second, grid)){printf("A* ERROR: Destination Node in the wall. x: %d, y: %d\n", dest.first, dest.second);}
+		if(!nodeBoundCheck(source.first, source.second))
+		{printf("A* ERROR: Source Node out of range. x: %d, y: %d\n",source.first, source.second);}
+		if(!nodeBoundCheck(dest.first, dest.second))
+		{printf("A* ERROR: Destination Node out of range. x: %d, y: %d\n", dest.first, dest.second);}
+		if(!nodeBlockCheck(source.first, source.second, grid))
+		{printf("A* ERROR: Source Node in the wall. x: %d, y: %d\n", source.first, source.second);}
+		if(!nodeBlockCheck(dest.first, dest.second, grid))
+		{printf("A* ERROR: Destination Node in the wall. x: %d, y: %d\n", dest.first, dest.second);}
 
 		//Creates a table of booleans
+		//false = node not included yet
 		bool closedList[MAX_ROW][MAX_COL];
 		memset(closedList, false, sizeof(closedList));
 
-		//Create a table of nodes
+		//Create a table of nodes -> node details
 		node details[MAX_ROW][MAX_COL];
 		int i, j;
 		for(i = 0; i < MAX_ROW; i++){
@@ -83,14 +81,15 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 
 		
 		//Create priority queue
-		set<pPair> openList;
+		set<pPair> openList; //info: <f, <i, j>>
+
 		openList.insert(make_pair(0.0f, make_pair(i, j)));
-		bool foundDest = false;
+		//Puts the starting cell on the open list and sets its 'f' as 0
+
+		bool foundDest = false; //destination not found yet
 
 		//Logic loop
 		while(!openList.empty()){
-
-			printf("x: %d , y: %d\n", i, j);
 
 			//Pop first
 			pPair p = *openList.begin();
@@ -100,36 +99,54 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 			i = p.second.first;
 			j = p.second.second;
 			closedList[i][j] = true;
+			
+			/*
+			Generating all the 4 successors of this node...
+ 
+					N  
+					| 
+             W---- Node ----E
+			 		|
+					S
+			
+			Cell-->Popped Cell (i, j)
+         	N -->  North       (i-1, j)
+         	S -->  South       (i+1, j)
+         	E -->  East        (i, j+1)
+         	W -->  West        (i, j-1)
+			*/
 
-			double ftemp, gtemp, htemp;
+			double ftemp, gtemp, htemp; //storing the f, g, and h of the successors
 
-			//North (i - 1, j)
+			//------------------------ North (i - 1, j) ------------------------
 			if(nodeBoundCheck(i - 1, j)){
 
 				//Check if destination is reached
 				if(destReached(i - 1, j, dest.first, dest.second)){
+					//set destination node's parent
 					details[i - 1][j].parent_i = i;
 					details[i - 1][j].parent_j = j;
 
-					//REMOVE LATER
-					printf("Node found!\n");
+					printf("Destination Node found!\n");
 
 					foundDest = true;
 					tracePath(details, dest);
 					return;
 				}
-				//Check if north node is not visited and not blocked
+				//If the north successor is neither visited (on closedList) nor blocked, then...
 				else if((closedList[i - 1][j] == false) && (nodeBlockCheck(i - 1, j, grid) == true)){
 
 					//Calculating cost
-					gtemp = details[i][j].g + 1.0;
+					gtemp = details[i][j].g + 1.0; //+ 1.414 instead if it was a diagonal
 					htemp = getHeuristic(i - 1, j, dest.first, dest.second);
 					ftemp = gtemp + htemp;
 
-					//Check if never entered in open list or new cost is lower
+					//If not on openList OR if cost is lower,
+					//then add it to openList and update node details
 					if((details[i - 1][j].f  == FLOAT_MAX) || (details[i - 1][j].f  > ftemp)){
 						openList.insert(make_pair(ftemp, make_pair(i - 1, j)));
 						
+						//Update node details
 						details[i - 1][j].f = ftemp;
 						details[i - 1][j].g = gtemp;
 						details[i - 1][j].h = htemp;
@@ -139,22 +156,22 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 				}
 			}
 
-			//South (i + 1, j)
+			//------------------------ South (i + 1, j) ------------------------
 			if(nodeBoundCheck(i + 1, j)){
 
 				//Check if destination is reached
 				if(destReached(i + 1, j, dest.first, dest.second)){
+					//set destination node's parent
 					details[i + 1][j].parent_i = i;
 					details[i + 1][j].parent_j = j;
 					foundDest = true;
 
-					//REMOVE LATER
-					printf("Node found!\n");
+					printf("Destination Node found!\n");
 
 					tracePath(details, dest);
 					return;
 				}
-				//Check if south node is not visited and not blocked
+				//If the south successor is neither visited (on closedList) nor blocked, then...
 				else if((closedList[i + 1][j] == false) && (nodeBlockCheck(i + 1, j, grid) == true)){
 
 					//Calculating cost
@@ -162,10 +179,12 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					htemp = getHeuristic(i + 1, j, dest.first, dest.second);
 					ftemp = gtemp + htemp;
 
-					//Check if never entered in open list or new cost is lower
+					//If not on openList OR if cost is lower,
+					//then add it to openList and update node details
 					if((details[i + 1][j].f  == FLOAT_MAX) || (details[i + 1][j].f  > ftemp)){
 						openList.insert(make_pair(ftemp, make_pair(i + 1, j)));
 
+						//Update node details
 						details[i + 1][j].f = ftemp;
 						details[i + 1][j].g = gtemp;
 						details[i + 1][j].h = htemp;
@@ -176,22 +195,22 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 			}
 
 			
-			//East (i, j + 1)
+			//------------------------ East (i, j + 1) -------------------------
 			if(nodeBoundCheck(i, j + 1)){
 
 				//Check if destination is reached
 				if(destReached(i, j  + 1, dest.first, dest.second)){
+					//set destination node's parent
 					details[i][j + 1].parent_i = i;
 					details[i][j + 1].parent_j = j;
 					foundDest = true;
 
-					//REMOVE LATER
-					printf("Node found!\n");
+					printf("Destination Node found!\n");
 
 					tracePath(details, dest);
 					return;
 				}
-				//Check if east node is not visited and not blocked
+				//If the east successor is neither visited (on closedList) nor blocked, then...
 				else if((closedList[i][j + 1] == false) && (nodeBlockCheck(i, j + 1, grid) == true)){
 
 					//Calculating cost
@@ -199,10 +218,12 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					htemp = getHeuristic(i, j + 1, dest.first, dest.second);
 					ftemp = gtemp + htemp;
 
-					//Check if never entered in open list or new cost is lower
+					//If not on openList OR if cost is lower,
+					//then add it to openList and update node details
 					if((details[i][j + 1].f  == FLOAT_MAX) || (details[i][j + 1].f  > ftemp)){
 						openList.insert(make_pair(ftemp, make_pair(i, j + 1)));
-						
+
+						//Update node details
 						details[i][j + 1].f = ftemp;
 						details[i][j + 1].g = gtemp;
 						details[i][j + 1].h = htemp;
@@ -213,22 +234,22 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 			}
 
 
-			//West (i, j - 1)
+			//------------------------ West (i, j - 1) -------------------------
 			if(nodeBoundCheck(i, j - 1)){
 
 				//Check if destination is reached
 				if(destReached(i, j  - 1, dest.first, dest.second)){
+					//set destination node's parent
 					details[i][j - 1].parent_i = i;
 					details[i][j - 1].parent_j = j;
 					foundDest = true;
 
-					//REMOVE LATER
-					printf("Node found!\n");
+					printf("Destination Node found!\n");
 
 					tracePath(details, dest);
 					return;
 				}
-				//Check if west node is not visited and not blocked
+				//If the west successor is neither visited (on closedList) nor blocked, then...
 				else if((closedList[i][j - 1] == false) && (nodeBlockCheck(i, j - 1, grid) == true)){
 
 					//Calculating cost
@@ -236,10 +257,12 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					htemp = getHeuristic(i, j - 1, dest.first, dest.second);
 					ftemp = gtemp + htemp;
 
-					//Check if never entered in open list or new cost is lower
+					//If not on openList OR if cost is lower,
+					//then add it to openList and update node details
 					if((details[i][j - 1].f  == FLOAT_MAX) || (details[i][j - 1].f  > ftemp)){
 						openList.insert(make_pair(ftemp, make_pair(i, j - 1)));
-						
+
+						//Update node details
 						details[i][j - 1].f = ftemp;
 						details[i][j - 1].g = gtemp;
 						details[i][j - 1].h = htemp;
@@ -248,163 +271,13 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					}
 				}
 			}
-
-			
-			//North-East (i - 1, j + 1)
-			if(nodeBoundCheck(i - 1, j + 1)){
-
-				//Check if destination is reached
-				if(destReached(i - 1, j  + 1, dest.first, dest.second)){
-					details[i - 1][j + 1].parent_i = i;
-					details[i - 1][j + 1].parent_j = j;
-					foundDest = true;
-
-					//REMOVE LATER
-					printf("Node found!\n");
-
-					tracePath(details, dest);
-					return;
-				}
-				//Check if north-east node is not visited and not blocked
-				else if((closedList[i - 1][j + 1] == false) && (nodeBlockCheck(i - 1, j + 1, grid) == true)){
-
-					//Calculating cost
-					gtemp = details[i][j].g + 1.414;
-					htemp = getHeuristic(i - 1, j + 1, dest.first, dest.second);
-					ftemp = gtemp + htemp;
-
-					//Check if never entered in open list or new cost is lower
-					if((details[i - 1][j + 1].f  == FLOAT_MAX) || (details[i - 1][j + 1].f  > ftemp)){
-						openList.insert(make_pair(ftemp, make_pair(i - 1, j + 1)));
-						
-						details[i - 1][j + 1].f = ftemp;
-						details[i - 1][j + 1].g = gtemp;
-						details[i - 1][j + 1].h = htemp;
-						details[i - 1][j + 1].parent_i = i;
-						details[i - 1][j + 1].parent_j = j;
-					}
-				}
-			}
-
-			
-			//North-West (i - 1, j - 1)
-			if(nodeBoundCheck(i - 1, j - 1)){
-
-				//Check if destination is reached
-				if(destReached(i - 1, j  - 1, dest.first, dest.second)){
-					details[i - 1][j - 1].parent_i = i;
-					details[i - 1][j - 1].parent_j = j;
-					foundDest = true;
-
-					//REMOVE LATER
-					printf("Node found!\n");
-
-					tracePath(details, dest);
-					return;
-				}
-				//Check if north-west node is not visited and not blocked
-				else if((closedList[i - 1][j - 1] == false) && (nodeBlockCheck(i - 1, j - 1, grid) == true)){
-
-					//Calculating cost
-					gtemp = details[i][j].g + 1.414;
-					htemp = getHeuristic(i - 1, j - 1, dest.first, dest.second);
-					ftemp = gtemp + htemp;
-
-					//Check if never entered in open list or new cost is lower
-					if((details[i - 1][j - 1].f  == FLOAT_MAX) || (details[i - 1][j - 1].f  > ftemp)){
-						openList.insert(make_pair(ftemp, make_pair(i - 1, j - 1)));
-						
-						details[i - 1][j - 1].f = ftemp;
-						details[i - 1][j - 1].g = gtemp;
-						details[i - 1][j - 1].h = htemp;
-						details[i - 1][j - 1].parent_i = i;
-						details[i - 1][j - 1].parent_j = j;
-					}
-				}
-			}
-
-
-			//South-East (i + 1, j + 1)
-			if(nodeBoundCheck(i + 1, j + 1)){
-
-				//Check if destination is reached
-				if(destReached(i + 1, j  + 1, dest.first, dest.second)){
-					details[i + 1][j + 1].parent_i = i;
-					details[i + 1][j + 1].parent_j = j;
-					foundDest = true;
-
-					//REMOVE LATER
-					printf("Node found!\n");
-
-					tracePath(details, dest);
-					return;
-				}
-				//Check if south-east node is not visited and not blocked
-				else if((closedList[i + 1][j + 1] == false) && (nodeBlockCheck(i + 1, j + 1, grid) == true)){
-
-					//Calculating cost
-					gtemp = details[i][j].g + 1.414;
-					htemp = getHeuristic(i + 1, j + 1, dest.first, dest.second);
-					ftemp = gtemp + htemp;
-
-					//Check if never entered in open list or new cost is lower
-					if((details[i + 1][j + 1].f  == FLOAT_MAX) || (details[i + 1][j + 1].f  > ftemp)){
-						openList.insert(make_pair(ftemp, make_pair(i + 1, j + 1)));
-						
-						details[i + 1][j + 1].f = ftemp;
-						details[i + 1][j + 1].g = gtemp;
-						details[i + 1][j + 1].h = htemp;
-						details[i + 1][j + 1].parent_i = i;
-						details[i + 1][j + 1].parent_j = j;
-					}
-				}
-			}
-			
-			//South-West (i + 1, j - 1)
-			if(nodeBoundCheck(i + 1, j - 1)){
-
-				//Check if destination is reached
-				if(destReached(i + 1, j  - 1, dest.first, dest.second)){
-					details[i + 1][j - 1].parent_i = i;
-					details[i + 1][j - 1].parent_j = j;
-					foundDest = true;
-
-					//REMOVE LATER
-					printf("Node found!\n");
-
-					tracePath(details, dest);
-					return;
-				}
-				//Check if south-west node is not visited and not blocked
-				else if((closedList[i + 1][j - 1] == false) && (nodeBlockCheck(i + 1, j - 1, grid) == true)){
-
-					//Calculating cost
-					gtemp = details[i][j].g + 1.414;
-					htemp = getHeuristic(i + 1, j - 1, dest.first, dest.second);
-					ftemp = gtemp + htemp;
-
-					//Check if never entered in open list or new cost is lower
-					if((details[i + 1][j - 1].f  == FLOAT_MAX) || (details[i + 1][j - 1].f  > ftemp)){
-						openList.insert(make_pair(ftemp, make_pair(i + 1, j - 1)));
-						
-						details[i + 1][j - 1].f = ftemp;
-						details[i + 1][j - 1].g = gtemp;
-						details[i + 1][j - 1].h = htemp;
-						details[i + 1][j - 1].parent_i = i;
-						details[i + 1][j - 1].parent_j = j;
-					}
-				}
-			}
 		}
 
-		if(foundDest == false){
-			printf("A* ERROR: Path not found.\n");
-		}
+		if(foundDest == false){printf("A* ERROR: Path not found.\n");}
 
-	} else {
-		printf("A* ERROR: Not initalized\n");
-	}
+	} else {printf("A* ERROR: Not initalized\n");}
 
 	return;
+
 }
 
