@@ -1,5 +1,6 @@
 //A* Algorithm CPP File
 #include "astar.h"
+#include <cstring>
 using namespace std;
 
 double Astar::getHeuristic(int x, int y, int destX, int destY){
