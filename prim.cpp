@@ -52,7 +52,7 @@ void Prim::primMST(vector<pair<int,int> > adj[]){
     MST = parent;
 }
 
-void Prim::Print(){
+vector<int> Prim::Print(){
     //Print edges of MST
     vector<iPair > adj[SIZE];
 	srand(time(0));
@@ -79,4 +79,5 @@ void Prim::Print(){
 	primMST(adj);
     printf("\n_____List of Open Edges in Maze_____\n");
 	for(int i = 1; i < SIZE; ++i){ printf("\t\t%d - %d\n", MST[i], i); }
+	return MST;
 }

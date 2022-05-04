@@ -6,6 +6,9 @@
 #include <cstdio>
 #include <utility>
 #define FLOAT_MAX 99999999999999.99
+//#define MAX_ROW 2*5 - 1
+//#define MAX_COL 2*5 - 1
+
 #define MAX_ROW 9
 #define MAX_COL 10
 using namespace std;

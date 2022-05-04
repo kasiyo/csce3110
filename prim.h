@@ -27,7 +27,7 @@ class Prim{
     Prim(int n, int SIZE){this->n = n; this->SIZE = SIZE;}
     void addEdge(vector<pair<int, int> > adj[], int u, int v, int wt);
     void primMST(vector<pair<int,int> > adj[]);
-    void Print(); //Prints new graph/maze's open paths/edges
+    vector<int> Print(); //Prints new graph/maze's open paths/edges
 };
 
 //#endif
