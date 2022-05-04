@@ -34,11 +34,16 @@ void Astar::tracePath(node details[][MAX_COL], Pair dest){
 	}
 
 	Path.push(make_pair(x, y));
+	printf("\nPath from source to destination:\n");
+	int n = 0;
 	while(!Path.empty()){
 		pair<int, int> p = Path.top();
 		Path.pop();
 		printf("-> (%d, %d) ", p.first, p.second);
+		n++;
+		if(n == 5){printf("\n"); n = 0;} //print out 5 coordinates on each line
 	}
+	printf("\n\n");
 
 	return;
 }
@@ -127,7 +132,7 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i - 1][j].parent_i = i;
 					details[i - 1][j].parent_j = j;
 
-					printf("Destination Node found!\n");
+					printf("\n\nDestination Coordinates found!\n");
 
 					foundDest = true;
 					tracePath(details, dest);
@@ -166,7 +171,7 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i + 1][j].parent_j = j;
 					foundDest = true;
 
-					printf("Destination Node found!\n");
+					printf("\n\nDestination Coordinates found!\n");
 
 					tracePath(details, dest);
 					return;
@@ -205,7 +210,7 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i][j + 1].parent_j = j;
 					foundDest = true;
 
-					printf("Destination Node found!\n");
+					printf("\n\nDestination Coordinates found!\n");
 
 					tracePath(details, dest);
 					return;
@@ -244,7 +249,7 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i][j - 1].parent_j = j;
 					foundDest = true;
 
-					printf("Destination Node found!\n");
+					printf("\n\nDestination Coordinates found!\n");
 
 					tracePath(details, dest);
 					return;

@@ -1,10 +1,17 @@
 #include <iostream>
 #include <stdio.h>
+#include <cmath>
 #include "astar.h"
+#include "prim.h"
 using namespace std;
 
 int main(){
-	int grid[MAX_ROW][MAX_COL] = {
+    int n = 5; //length and width of square graph/maze
+	Prim prim(n, pow(n, 2));
+	prim.Print(); //Prints new graph/maze's open paths/edges
+
+
+	int grid[MAX_ROW][MAX_COL] = { //sample maze/grid/graph
     { 1, 1, 1, 1, 1, 1, 0, 1, 1, 1 },
     { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
     { 0, 1, 1, 0, 1, 1, 0, 1, 1, 1 },

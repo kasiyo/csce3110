@@ -1,9 +1,10 @@
 //A* Algorithm Header File
 #include <iostream>
+#include <set>
+#include <stack>
 #include <cmath>
 #include <cstdio>
 #include <utility>
-#include <bits/stdc++.h>
 #define FLOAT_MAX 99999999999999.99
 #define MAX_ROW 9
 #define MAX_COL 10
