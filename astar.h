@@ -6,11 +6,8 @@
 #include <cstdio>
 #include <utility>
 #define FLOAT_MAX 99999999999999.99
-//#define MAX_ROW 2*5 - 1
-//#define MAX_COL 2*5 - 1
-
 #define MAX_ROW 9
-#define MAX_COL 10
+#define MAX_COL 9
 using namespace std;
 
 struct node{ //stores cost of nodes and parents of nodes for stack

@@ -77,7 +77,7 @@ vector<int> Prim::Print(){
 	}
 
 	primMST(adj);
-    printf("\n_____List of Open Edges in Maze_____\n");
-	for(int i = 1; i < SIZE; ++i){ printf("\t\t%d - %d\n", MST[i], i); }
+    printf("\nOpen Paths:\n\n");
+	for(int i = 1; i < SIZE; ++i){ printf("%d - %d\n", MST[i], i); }
 	return MST;
 }

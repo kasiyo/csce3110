@@ -54,13 +54,13 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 	//Check for errors
 	if(grid){
 		if(!nodeBoundCheck(source.first, source.second))
-		{printf("A* ERROR: Source Node out of range. x: %d, y: %d\n",source.first, source.second);}
+		{printf("A* ERROR: Source Node out of range. x: %d, y: %d\n\n",source.first, source.second);}
 		if(!nodeBoundCheck(dest.first, dest.second))
-		{printf("A* ERROR: Destination Node out of range. x: %d, y: %d\n", dest.first, dest.second);}
+		{printf("A* ERROR: Destination Node out of range. x: %d, y: %d\n\n", dest.first, dest.second);}
 		if(!nodeBlockCheck(source.first, source.second, grid))
-		{printf("A* ERROR: Source Node in the wall. x: %d, y: %d\n", source.first, source.second);}
+		{printf("A* ERROR: Source Node in the wall. x: %d, y: %d\n\n", source.first, source.second);}
 		if(!nodeBlockCheck(dest.first, dest.second, grid))
-		{printf("A* ERROR: Destination Node in the wall. x: %d, y: %d\n", dest.first, dest.second);}
+		{printf("A* ERROR: Destination Node in the wall. x: %d, y: %d\n\n", dest.first, dest.second);}
 
 		//Creates a table of booleans
 		//false = node not included yet
@@ -133,8 +133,6 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i - 1][j].parent_i = i;
 					details[i - 1][j].parent_j = j;
 
-					printf("\n\nDestination Coordinates found!\n");
-
 					foundDest = true;
 					tracePath(details, dest);
 					return;
@@ -171,8 +169,6 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i + 1][j].parent_i = i;
 					details[i + 1][j].parent_j = j;
 					foundDest = true;
-
-					printf("\n\nDestination Coordinates found!\n");
 
 					tracePath(details, dest);
 					return;
@@ -211,8 +207,6 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i][j + 1].parent_j = j;
 					foundDest = true;
 
-					printf("\n\nDestination Coordinates found!\n");
-
 					tracePath(details, dest);
 					return;
 				}
@@ -249,8 +243,6 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 					details[i][j - 1].parent_i = i;
 					details[i][j - 1].parent_j = j;
 					foundDest = true;
-
-					printf("\n\nDestination Coordinates found!\n");
 
 					tracePath(details, dest);
 					return;

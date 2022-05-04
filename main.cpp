@@ -1,3 +1,4 @@
+//Main CPP File
 #include <iostream>
 #include <stdio.h>
 #include <cmath>
@@ -14,8 +15,12 @@ int main(){
     vector<int> mst; ////minimum spanning tree
 	mst = prim.Print(); //Prints new graph/maze's open paths/edges
 
-    int s = 2*n - 1; //grid size
-    int grid[s][s];
+    int s = 2*n - 1; //grid size = 9
+    int grid[9][9]; //must be hardcoded due to passing constraints
+    //hard coded here and in astar.h for definitions of MAX_ROW and MAX_COl
+    //if you want to pass variable sizes, you would need to change
+    //the 2D grid arrays to 2D vectors.
+
     memset(grid, 0, sizeof(grid)); //set grid to all 0's
     //random maze will be filled with 1's and 0's
     //1's are open paths, 0's are closed paths
@@ -75,16 +80,14 @@ int main(){
 
     }
 
-    printf("\n\n_____Maze Grid_____\n\n");
+    printf("\n\nMaze Grid:\n\n");
     for(int i = 0; i < s; ++i){
         for(int j = 0; j < s; ++j){ printf("%d ", grid[i][j]); }
         printf("\n");
     }
+    printf("\nNote: 0,0 is the left-most top-most corner\n");
+    printf("and 8,8 is the right-most bottom-most corner\n");
 
-
-//->->->->->->->->-> FIX BELLOW A* CODE <-<-<-<-<-<-<-<-<
-
-/*
     //********************** NOTE **********************
     //Let user pick source and destination coordinates
     //since each graph will be different, we don't know
@@ -99,8 +102,6 @@ int main(){
     scanf("%d,%d", &source_x, &source_y);
     printf("Destination: ");
     scanf("%d,%d", &dest_x, &dest_y);
-    printf("Source coordinates: %d,%d\n", source_x, source_y);
-    printf("Destination coordinates: %d,%d\n", dest_x, dest_y);
 
     const int sx = source_x;
     const int sy = source_y;
@@ -111,34 +112,6 @@ int main(){
 	pair<int, int> dest = make_pair(dx, dy); //Destination is the left-most top-most corner
 	Astar newAstar;
 	newAstar.generatePath(source, dest, grid);
-*/
-
-
-
-    /**/
-    //__________Sample grid__________
-    printf("\n\nSample grid being used instead...");
-
-	int grid2[MAX_ROW][MAX_COL] = {
-    { 1, 1, 1, 1, 1, 1, 0, 1, 1, 1 },
-    { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
-    { 0, 1, 1, 0, 1, 1, 0, 1, 1, 1 },
-    { 0, 0, 1, 0, 1, 0, 0, 1, 0, 1 },
-    { 0, 1, 1, 0, 1, 1, 1, 1, 1, 0 },
-    { 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 },
-    { 1, 1, 0, 0, 0, 1, 0, 0, 0, 1 },
-    { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-    { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 }
-    };
-    
-
-    //note: x is actually the y axis and y is the x axis if you're looking at the
-    //above grid representation as a cartesean plane
-	pair<int, int> source = make_pair(8, 0); //Source is the left-most bottom-most corner
-	pair<int, int> dest = make_pair(0, 0); //Destination is the left-most top-most corner
-	Astar newAstar;
-	newAstar.generatePath(source, dest, grid2);
-    /**/
 
 	return 0;
 }
