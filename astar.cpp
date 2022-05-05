@@ -11,7 +11,7 @@ bool Astar::nodeBoundCheck(int x, int y){
 	//If x and y is in range, then return true
 	return ((x >= 0) && (x < MAX_ROW) && (y >= 0) && (y < MAX_COL));
 }
-bool Astar::nodeBlockCheck(int x, int y, int grid[][MAX_COL]){
+bool Astar::nodeBlockCheck(int x, int y, int **grid){
 	//If node is not blocked, then return true, else false
 	if(grid[x][y] == 1) {return true;} else {return false;}
 }
@@ -20,7 +20,7 @@ bool Astar::destReached(int x, int y, int destX, int destY){
 	if((x == destX) && (y == destY)) {return true;} else {return false;}
 }
 
-void Astar::tracePath(node details[][MAX_COL], Pair dest){
+void Astar::tracePath(node **details, Pair dest){
 	int x = dest.first;
 	int y = dest.second;
 
@@ -49,7 +49,7 @@ void Astar::tracePath(node details[][MAX_COL], Pair dest){
 	return;
 }
 
-void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][MAX_COL]){
+void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int **grid){
 
 	//Check for errors
 	if(grid){
@@ -68,12 +68,12 @@ void Astar::generatePath(pair<int, int> source, pair<int, int> dest, int grid[][
 		memset(closedList, false, sizeof(closedList));
 
 		//Create a table of nodes -> node details
-		node details[MAX_ROW][MAX_COL];
+		node **details = new node*[MAX_ROW];
 		int i, j;
 		for(i = 0; i < MAX_ROW; i++){
+		    details[i] = new node[MAX_COL];
 			for(j = 0; j < MAX_COL; j++){
-				node temp = node();
-				details[i][j] = temp;
+				details[i][j] = node();
 			}
 		}
 

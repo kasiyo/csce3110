@@ -6,17 +6,13 @@
 #include <cstdio>
 #include <utility>
 #define FLOAT_MAX 99999999999999.99
-#define MAX_ROW 9
-#define MAX_COL 9
 using namespace std;
 
 struct node{ //stores cost of nodes and parents of nodes for stack
 	unsigned int parent_i;
 	unsigned int parent_j;
-	/*
-	Row and Column index of its parent
-    0 <= i <= ROW-1 & 0 <= j <= COL-1
-	*/
+	//Row and Column index of its parent
+    //0 <= i <= ROW-1 & 0 <= j <= COL-1
 
 	double f, g, h;
 	/* 
@@ -36,20 +32,25 @@ typedef pair<int, int> Pair; //stores coordinates
 typedef pair<double, pair<int, int> > pPair; //stores cost and coordinates
 
 class Astar{
+	private:
+	int MAX_ROW; int MAX_COL;
+
 	public:
+	Astar(int s){ MAX_ROW = s; MAX_COL = s; } //constructor, square maze
+
 	double getHeuristic(int x, int y, int destX, int destY); 
 	//gets Manhattan Distance between source x/y destination x/y
 
 	bool nodeBoundCheck(int x, int y); //check if node is out of range
-	bool nodeBlockCheck(int x, int y, int grid[][MAX_COL]); //check if node is in wall
+	bool nodeBlockCheck(int x, int y, int **grid); //check if node is in wall
 
 	bool destReached(int x, int y, int destX, int destY); //check if destination is reached
 
-	void tracePath(node details[][MAX_COL], Pair dest); //test output
+	void tracePath(node **details, Pair dest); //test output
 	//dest = destination
 	//details = node details
 
-	void generatePath(pair<int, int> source, pair<int, int> dest, int grid[][MAX_COL]);
+	void generatePath(pair<int, int> source, pair<int, int> dest, int **grid);
 	//generate path between source and destination 
 
 };
