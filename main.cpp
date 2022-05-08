@@ -101,9 +101,11 @@ int main(){
 
     //---kaia test start here--
     display visualizer(n, grid, s);
-    //visualizer.makeMap();
-    //visualizer.displayMap();
-    visualizer.test();
+    visualizer.mapCells();
+    visualizer.createMap();
+    visualizer.displayMap();
+
+    //visualizer.test();
     //---kaia test end here---
 
     printf("\nMaze Grid Note: 0,0 is the left-most top-most corner and\n");

@@ -15,7 +15,6 @@ typedef struct cell {
     int index;
     int num_id;
     char cell_id;
-    vector<int> adj_cell_indices;
     vector<pair<int, int>> adj_coords;
     bool north_wall, south_wall, east_wall, west_wall;
     bool north_neighbor, south_neighbor, east_neighbor, west_neighbor;
@@ -30,7 +29,6 @@ class display {
         display();
         ~display();
         display(int n, int** newGridMap, int size);    //parameterized constructor
-        void addEdge(int u, int v);
         
         void mapCells();
         void map_adjacent_cells(cell* cell_to_map);
@@ -39,28 +37,27 @@ class display {
 
         void printCells();
         void createMap();
-        void makeMap();
         void displayMap();
         void test();
     private:
         int** blueprint;
         char** gridMap;
-        vector <vector <char>> layers;
+        
+        vector<char> top_bot_border;
         vector <vector <char>> mapLayers;
-        vector <vector <char>> maze_layer;
-        vector <vector <char>> dividing_layers;
         vector <vector <char>> content_layers;
-        int max_x, max_y, numCorners, userInput;
+
+        int userInput;
         int sq_side_length, num_columns, num_rows;
         int num_cells_per_row, totalCells;
         int num_vertices, num_edges, last_index;
+
         vector<int> cell_row_indices;
         vector<cell*> cellMap;
-        vector<char> top_bot_border;
-        vector<pair<int, int>> coord_pairs;
+        
+        vector <pair<int, int> > coord_pairs;
         vector <pair<int, int> > frontier;
         vector <pair <cell*, pair<int, int> > > cell_coord_pairs;
-
 };
 
 #endif
