@@ -18,6 +18,10 @@ mazes represent, that is, creating a path in life despite it feeling like an end
 
 3. Visualizer Classes/Functions - [insert files used]	(Kaia Siripanyo)  
 
+**To Compile:**  
+g++ *.cpp  
+(using c++11 or above)  
+
 
 **Resources:**  
 [General explanation and visualization of concepts](https://emmilco.github.io/path_finder/)  
