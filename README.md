@@ -16,7 +16,7 @@ mazes represent, that is, creating a path in life despite it feeling like an end
 
 2. Prim's MST Maze Generator class - prim.cpp / prim.h	(William Zamudio)  
 
-3. Visualizer Classes/Functions - [insert files used]	(Kaia Siripanyo)  
+3. Visualizer Classes/Functions - display.cpp / display.h	(Kaia Siripanyo)  
 
 **To Compile:**  
 g++ *.cpp  

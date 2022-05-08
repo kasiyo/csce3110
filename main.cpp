@@ -1,12 +1,13 @@
 //Main CPP File
-#include <iostream>
-#include <stdio.h>
-#include <cmath>
-#include <cstring>
-#include <vector>
+//#include <iostream>
+//#include <stdio.h>
+//#include <cmath>
+//#include <cstring>
+//#include <vector>
 #include "astar.h"
 #include "prim.h"
-using namespace std;
+#include "display.h"
+//using namespace std;
 
 int main(){
     //Let user pick size of grid by choosing the length/width
@@ -97,6 +98,13 @@ int main(){
         for(int j = 0; j < s; ++j){ printf("%d ", grid[i][j]); }
         printf("\n");
     }
+
+    //---creates and builds the maze--
+    display visualizer(n, grid, s);
+    visualizer.mapCells();
+    visualizer.createMap();
+    visualizer.displayMap();
+
     printf("\nMaze Grid Note: 0,0 is the left-most top-most corner and\n");
     printf("(2*n - 2),(2*n - 2) is the right-most bottom-most corner\n");
 
